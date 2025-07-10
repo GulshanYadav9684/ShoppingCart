@@ -64,6 +64,7 @@ public class ProductServiceImpl implements ProductService {
         dbProduct.setPrice(product.getPrice());
         dbProduct.setStock(product.getStock());
         dbProduct.setImage(imageName);
+<<<<<<< HEAD
         dbProduct.setIsActive(product.getIsActive());
         dbProduct.setDiscount(product.getDiscount());
 
@@ -71,6 +72,8 @@ public class ProductServiceImpl implements ProductService {
         Double disocunt = product.getPrice() * (product.getDiscount() / 100.0);
         Double discountPrice = product.getPrice() - disocunt;
         dbProduct.setDiscountPrice(discountPrice);
+=======
+>>>>>>> 684a08daa5de4be18195f7ae71765870bb3315ef
 
         Product updateProduct = productRepository.save(dbProduct);
 
@@ -88,6 +91,10 @@ public class ProductServiceImpl implements ProductService {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 684a08daa5de4be18195f7ae71765870bb3315ef
             }
             return product;
         }
@@ -95,6 +102,7 @@ public class ProductServiceImpl implements ProductService {
         return null;
     }
 
+<<<<<<< HEAD
     @Override
     public List<Product> getAllActiveProducts(String category) {
         List<Product> products = null;
@@ -109,4 +117,6 @@ public class ProductServiceImpl implements ProductService {
 
 
 
+=======
+>>>>>>> 684a08daa5de4be18195f7ae71765870bb3315ef
 }

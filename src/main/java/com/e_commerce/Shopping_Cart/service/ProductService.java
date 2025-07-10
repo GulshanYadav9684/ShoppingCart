@@ -18,6 +18,9 @@ public interface ProductService {
 
     public Product updateProduct(Product product, MultipartFile file);
 
+<<<<<<< HEAD
     public List<Product> getAllActiveProducts(String category);
 
+=======
+>>>>>>> 684a08daa5de4be18195f7ae71765870bb3315ef
 }

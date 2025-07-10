@@ -1,11 +1,7 @@
 package com.e_commerce.Shopping_Cart.controller;
 
 import com.e_commerce.Shopping_Cart.model.Category;
-import com.e_commerce.Shopping_Cart.model.Product;
-import com.e_commerce.Shopping_Cart.model.UserDtls;
 import com.e_commerce.Shopping_Cart.service.CategoryService;
-import com.e_commerce.Shopping_Cart.service.ProductService;
-import com.e_commerce.Shopping_Cart.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -21,8 +17,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -31,39 +25,20 @@ public class AdminController {
     @Autowired
     private CategoryService categoryService;
 
-    @Autowired
-    private ProductService productService;
-
-    @Autowired
-    private UserService userService;
-
-    @ModelAttribute
-    public void getUserDetails(Principal p, Model m) {
-        if (p != null) {
-            String email = p.getName();
-            UserDtls userDtls = userService.getUserByEmail(email);
-            m.addAttribute("user", userDtls);
-        }
-
-        List<Category> allActiveCategory = categoryService.getAllActiveCategory();
-        m.addAttribute("categorys", allActiveCategory);
-    }
-
     @GetMapping("/")
-    public String index() {
+    public String index(){
         return "admin/index";
     }
 
     @GetMapping("/loadAddProduct")
-    public String loadAddProduct(Model m) {
-        List<Category> categories = categoryService.getAllCategory();
-        m.addAttribute("categories", categories);
+    public String loadAddProduct(){
         return "admin/add_product";
     }
 
     @GetMapping("/category")
-    public String category(Model m) {
-        m.addAttribute("categorys", categoryService.getAllCategory());
+    public String category(Model m)
+    {
+        m.addAttribute("categorys",categoryService.getAllCategory());
         return "admin/category";
     }
 
@@ -117,7 +92,7 @@ public class AdminController {
     @GetMapping("/loadEditCategory/{id}")
     public String loadEditCategory(@PathVariable int id, Model m) {
         m.addAttribute("category", categoryService.getCategoryById(id));
-        return "admin/edit_category";
+        return "  admin/edit_category";
     }
 
     @PostMapping("/updateCategory")
@@ -156,92 +131,5 @@ public class AdminController {
         return "redirect:/admin/loadEditCategory/" + category.getId();
     }
 
-    @PostMapping("/saveProduct")
-    public String saveProduct(@ModelAttribute Product product, @RequestParam("file") MultipartFile image,
-                              HttpSession session) throws IOException {
-
-        String imageName = image.isEmpty() ? "default.jpg" : image.getOriginalFilename();
-
-        product.setImage(imageName);
-        product.setDiscount(0);
-        product.setDiscountPrice(product.getPrice());
-        Product saveProduct = productService.saveProduct(product);
-
-        if (!ObjectUtils.isEmpty(saveProduct)) {
-
-            File saveFile = new ClassPathResource("static/img").getFile();
-
-            Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "product_img" + File.separator
-                    + image.getOriginalFilename());
-
-            // System.out.println(path);
-            Files.copy(image.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-
-            session.setAttribute("succMsg", "Product Saved Success");
-        } else {
-            session.setAttribute("errorMsg", "something wrong on server");
-        }
-
-        return "redirect:/admin/loadAddProduct";
+//categoryService.saveCategory(category);
     }
-
-    @GetMapping("/products")
-    public String loadViewProduct(Model m) {
-        m.addAttribute("products", productService.getAllProducts());
-        return "admin/products";
-    }
-
-    @GetMapping("/deleteProduct/{id}")
-    public String deleteProduct(@PathVariable int id, HttpSession session) {
-        Boolean deleteProduct = productService.deleteProduct(id);
-        if (deleteProduct) {
-            session.setAttribute("succMsg", "Product delete success");
-        } else {
-            session.setAttribute("errorMsg", "Something wrong on server");
-        }
-        return "redirect:/admin/products";
-    }
-
-    @GetMapping("/editProduct/{id}")
-    public String editProduct(@PathVariable int id, Model m) {
-        m.addAttribute("product", productService.getProductById(id));
-        m.addAttribute("categories", categoryService.getAllCategory());
-        return "admin/edit_product";
-    }
-
-    @PostMapping("/updateProduct")
-    public String updateProduct(@ModelAttribute Product product, @RequestParam("file") MultipartFile image,
-                                HttpSession session, Model m) {
-
-        if (product.getDiscount() < 0 || product.getDiscount() > 100) {
-            session.setAttribute("errorMsg", "invalid Discount");
-        } else {
-            Product updateProduct = productService.updateProduct(product, image);
-            if (!ObjectUtils.isEmpty(updateProduct)) {
-                session.setAttribute("succMsg", "Product update success");
-            } else {
-                session.setAttribute("errorMsg", "Something wrong on server");
-            }
-        }
-        return "redirect:/admin/editProduct/" + product.getId();
-    }
-
-    @GetMapping("/users")
-    public String getAllUsers(Model m) {
-        List<UserDtls> users = userService.getUsers("ROLE_USER");
-        m.addAttribute("users", users);
-        return "/admin/users";
-    }
-
-    @GetMapping("/updateSts")
-    public String updateUserAccountStatus(@RequestParam Boolean status, @RequestParam Integer id, HttpSession session) {
-        Boolean f = userService.updateAccountStatus(id, status);
-        if (f) {
-            session.setAttribute("succMsg", "Account Status Updated");
-        } else {
-            session.setAttribute("errorMsg", "Something wrong on server");
-        }
-        return "redirect:/admin/users";
-    }
-
-}

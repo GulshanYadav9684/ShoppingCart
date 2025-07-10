@@ -9,8 +9,18 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product,Integer> {
+<<<<<<< HEAD
     List<Product> findByIsActiveTrue();
 
     List<Product> findByCategory(String category);
 
+=======
+//    Product save(Product product);
+//
+//    List<Product> findAll();
+//
+//    Optional<Object> findById(Integer id);
+//
+//    void delete(Product product);
+>>>>>>> 684a08daa5de4be18195f7ae71765870bb3315ef
 }
