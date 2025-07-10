@@ -9,11 +9,8 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product,Integer> {
-//    Product save(Product product);
-//
-//    List<Product> findAll();
-//
-//    Optional<Object> findById(Integer id);
-//
-//    void delete(Product product);
+    List<Product> findByIsActiveTrue();
+
+    List<Product> findByCategory(String category);
+
 }

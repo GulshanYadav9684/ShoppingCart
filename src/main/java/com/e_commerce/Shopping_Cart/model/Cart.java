@@ -1,44 +1,36 @@
 package com.e_commerce.Shopping_Cart.model;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity
-public class Product {
+public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
-    @Column(length = 500)
-    private String title;
+    @ManyToOne
+    private UserDtls user;
 
-    @Column(length = 5000)
-    private String description;
+    @ManyToOne
+    private Product product;
 
-    private String category;
+    private Integer quantity;
 
-    private Double price;
-
-    private int stock;
-
-    private String image;
-
-    private int  discount;
-
-    private Double discountPrice;
-    private Boolean isActive;
-
+    @Transient
+    private Double totalPrice;
 
 }

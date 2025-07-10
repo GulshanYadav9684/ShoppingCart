@@ -13,4 +13,7 @@ public interface CategoryService {
     Boolean deleteCategory(int id);
 
     Object getCategoryById(int id);
+
+    public List<Category> getAllActiveCategory();
+
 }
