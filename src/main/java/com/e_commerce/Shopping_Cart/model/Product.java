@@ -35,13 +35,10 @@ public class Product {
 
     private String image;
 
-<<<<<<< HEAD
+
     private int  discount;
 
     private Double discountPrice;
     private Boolean isActive;
 
-
-=======
->>>>>>> 684a08daa5de4be18195f7ae71765870bb3315ef
 }
