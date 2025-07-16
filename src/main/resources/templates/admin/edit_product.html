@@ -10,11 +10,7 @@
 <section>
     <div class="container p-5 mt-3">
         <div class="row">
-<<<<<<< HEAD
             <div class="col-md-8 offset-md-2">
-=======
-            <div class="col-md-6 offset-md-3">
->>>>>>> 684a08daa5de4be18195f7ae71765870bb3315ef
                 <div class="card card-sh">
                     <div class="card-header text-center ">
                         <p class="fs-4">Edit Product</p>
@@ -44,7 +40,6 @@
                                 <textarea rows="3" cols="" class="form-control"
                                           name="description">[[${product.description}]]</textarea>
                             </div>
-<<<<<<< HEAD
                             <div class="row">
                                 <div class="mb-3 col">
                                     <label>Category</label> <select class="form-control"
@@ -88,21 +83,6 @@
 
                             </div>
 
-=======
-
-                            <div class="mb-3">
-                                <label>Category</label> <select class="form-control"
-                                                                name="category">
-                                <option>[[${product.category}]]</option>
-                                <option th:each="c:${categories}">[[${c.name}]]</option>
-                            </select>
-                            </div>
-
-                            <div class="mb-3">
-                                <label>Enter Price</label> <input type="number" name="price"
-                                                                  th:value="${product.price}" class="form-control">
-                            </div>
->>>>>>> 684a08daa5de4be18195f7ae71765870bb3315ef
                             <div class="row">
 
                                 <div class="mb-3 col">
