@@ -11,6 +11,7 @@ import java.util.List;
 import com.e_commerce.Shopping_Cart.model.Category;
 import com.e_commerce.Shopping_Cart.model.Product;
 import com.e_commerce.Shopping_Cart.model.UserDtls;
+import com.e_commerce.Shopping_Cart.service.CartService;
 import com.e_commerce.Shopping_Cart.service.CategoryService;
 import com.e_commerce.Shopping_Cart.service.ProductService;
 import com.e_commerce.Shopping_Cart.service.UserService;
@@ -42,12 +43,17 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CartService cartService;
+
     @ModelAttribute
     public void getUserDetails(Principal p, Model m) {
         if (p != null) {
             String email = p.getName();
             UserDtls userDtls = userService.getUserByEmail(email);
             m.addAttribute("user", userDtls);
+            Integer countCart = cartService.getCountCart(userDtls.getId());
+            m.addAttribute("countCart", countCart);
         }
 
         List<Category> allActiveCategory = categoryService.getAllActiveCategory();
