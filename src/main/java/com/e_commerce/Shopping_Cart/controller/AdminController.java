@@ -13,6 +13,7 @@ import com.e_commerce.Shopping_Cart.model.Product;
 import com.e_commerce.Shopping_Cart.model.ProductOrder;
 import com.e_commerce.Shopping_Cart.model.UserDtls;
 import com.e_commerce.Shopping_Cart.service.*;
+import com.e_commerce.Shopping_Cart.util.CommonUtil;
 import com.e_commerce.Shopping_Cart.util.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -48,6 +49,8 @@ public class AdminController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private CommonUtil commonUtil;
 
     @ModelAttribute
     public void getUserDetails(Principal p, Model m) {
@@ -277,9 +280,15 @@ public class AdminController {
             }
         }
 
-        Boolean updateOrder = orderService.updateOrderStatus(id, status);
+        ProductOrder updateOrder = orderService.updateOrderStatus(id, status);
 
-        if (updateOrder) {
+        try {
+            commonUtil.sendMailForProductOrder(updateOrder, status);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (!ObjectUtils.isEmpty(updateOrder)) {
             session.setAttribute("succMsg", "Status Updated");
         } else {
             session.setAttribute("errorMsg", "status not updated");

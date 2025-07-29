@@ -11,6 +11,7 @@ import com.e_commerce.Shopping_Cart.model.ProductOrder;
 import com.e_commerce.Shopping_Cart.repository.CartRepository;
 import com.e_commerce.Shopping_Cart.repository.ProductOrderRepository;
 import com.e_commerce.Shopping_Cart.service.OrderService;
+import com.e_commerce.Shopping_Cart.util.CommonUtil;
 import com.e_commerce.Shopping_Cart.util.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,8 +28,11 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private CartRepository cartRepository;
 
+    @Autowired
+    private CommonUtil commonUtil;
+
     @Override
-    public void saveOrder(Integer userid, OrderRequest orderRequest) {
+    public void saveOrder(Integer userid, OrderRequest orderRequest) throws Exception {
 
         List<Cart> carts = cartRepository.findByUserId(userid);
 
@@ -60,8 +64,8 @@ public class OrderServiceImpl implements OrderService {
 
             order.setOrderAddress(address);
 
-            orderRepository.save(order);
-
+            ProductOrder saveOrder = orderRepository.save(order);
+            commonUtil.sendMailForProductOrder(saveOrder, "success");
         }
     }
 
@@ -72,19 +76,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Boolean updateOrderStatus(Integer id, String status) {
+    public ProductOrder updateOrderStatus(Integer id, String status) {
         Optional<ProductOrder> findById = orderRepository.findById(id);
         if (findById.isPresent()) {
             ProductOrder productOrder = findById.get();
             productOrder.setStatus(status);
-            orderRepository.save(productOrder);
-            return true;
+            ProductOrder updateOrder = orderRepository.save(productOrder);
+            return updateOrder;
         }
-        return false;
+        return null;
     }
 
     @Override
     public List<ProductOrder> getAllOrders() {
         return orderRepository.findAll();
     }
+
 }
